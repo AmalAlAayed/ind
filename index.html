@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>العدادات التنازلية</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #000;
+            /* Black background */
+            color: #fff;
+            /* White text */
+        }
+
+        .countdown {
+            margin: 20px auto;
+            font-size: 1.5em;
+            padding: 20px;
+            max-width: 400px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #fff;
+            /* White text */
+        }
+
+        .motivational-phrase {
+            font-size: 1.2em;
+            color: #4caf50;
+            /* Green text for the motivational phrase */
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #fff;
+            /* White text */
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #ccc;
+            /* Light gray text for the countdown numbers */
+            transition: color 0.3s ease;
+            /* Smooth color transition */
+        }
+
+        .end-date {
+            font-size: 0.9em;
+            color: #888;
+            /* Gray text for the end date */
+            margin-top: 5px;
+        }
+
+        .orange {
+            color: orange;
+            /* Orange color for less than 30 days */
+        }
+
+        .red {
+            color: red;
+            /* Red color for less than 11 days */
+        }
+
+        progress {
+            width: 100%;
+            height: 10px;
+            margin-top: 10px;
+            background-color: #444;
+            /* Dark gray background for the progress bar */
+            border: none;
+            border-radius: 5px;
+        }
+
+        progress::-webkit-progress-bar {
+            background-color: #444;
+            /* Dark gray background for the progress bar */
+            border-radius: 5px;
+        }
+
+        progress::-webkit-progress-value {
+            background-color: #4caf50;
+            /* Green progress bar */
+            border-radius: 5px;
+        }
+
+        progress::-moz-progress-bar {
+            background-color: #4caf50;
+            /* Green progress bar */
+            border-radius: 5px;
+        }
+
+        /* Balloons animation */
+        .balloons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .balloon {
+            position: absolute;
+            bottom: -10%;
+            animation: float 6s ease-in infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-110vh);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>العدادات التنازلية</h1>
+    <div class="motivational-phrase" id="motivationalPhrase"></div>
+
+    <div class="countdown">
+        <h2>🎓 حفل التخرج</h2>
+        <p id="countdown1"></p>
+        <div class="end-date" id="endDate1"></div>
+        <progress id="progress1" value="0" max="100"></progress>
+    </div>
+
+    <div class="countdown">
+        <h2>📄 تسليم البحث</h2>
+        <p id="countdown2"></p>
+        <div class="end-date" id="endDate2"></div>
+        <progress id="progress2" value="0" max="100"></progress>
+    </div>
+
+    <div class="countdown">
+        <h2>🏁 نهاية التدريب</h2>
+        <p id="countdown3"></p>
+        <div class="end-date" id="endDate3"></div>
+        <progress id="progress3" value="0" max="100"></progress>
+    </div>
+
+    <!-- Balloons container -->
+    <div class="balloons" id="balloonsContainer"></div>
+
+    <script>
+        // Array of motivational phrases in Arabic with emojis
+        const motivationalPhrases = [
+            "🌟 النجاح هو مجموع الجهود الصغيرة المتكررة يومياً.",
+            "🚀 لا تنتظر الظروف المثالية، اصنعها بنفسك.",
+            "🌞 كل يوم هو فرصة جديدة لتحقيق شيء عظيم.",
+            "🔥 التحديات هي ما تجعل الحياة مثيرة للاهتمام.",
+            "💪 الطموح هو الطريق إلى النجاح.",
+            "🌈 لا تتوقف عن الحلم، ولا تتوقف عن العمل.",
+            "👣 كل خطوة تقربك من هدفك.",
+            "✨ النجاح يبدأ عندما تبدأ أنت.",
+            "🌍 كن التغيير الذي تريد أن تراه في العالم.",
+            "💡 المستقبل ينتمي لأولئك الذين يؤمنون بجمال أحلامهم.",
+        ];
+
+        // Function to display a random motivational phrase
+        function displayMotivationalPhrase() {
+            const phraseElement = document.getElementById("motivationalPhrase");
+            const randomIndex = Math.floor(Math.random() * motivationalPhrases.length);
+            phraseElement.textContent = motivationalPhrases[randomIndex];
+        }
+
+        // Function to create balloons
+        function createBalloons() {
+            const balloonsContainer = document.getElementById("balloonsContainer");
+            for (let i = 0; i < 20; i++) {
+                const balloon = document.createElement("div");
+                balloon.className = "balloon";
+                balloon.innerHTML = "🎈";
+                balloon.style.left = `${Math.random() * 100}%`;
+                balloon.style.animationDuration = `${Math.random() * 4 + 6}s`;
+                balloonsContainer.appendChild(balloon);
+            }
+        }
+
+        // Function to calculate the countdown and update progress
+        function countdown(targetDate, elementId, progressId, endDateId) {
+            const target = new Date(targetDate).getTime();
+            const startDate = new Date().getTime(); // Start date is today
+            const totalDuration = target - startDate;
+
+            // Display the end date
+            const endDateElement = document.getElementById(endDateId);
+            const formattedEndDate = new Date(targetDate).toLocaleDateString("ar-EG", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            });
+            endDateElement.textContent = `تاريخ الانتهاء: ${formattedEndDate}`;
+
+            const timer = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = target - now;
+
+                if (distance < 0) {
+                    clearInterval(timer);
+                    document.getElementById(elementId).innerHTML = "انتهى الوقت";
+                    document.getElementById(progressId).value = 100; // Set progress to 100% when time is up
+                    return;
+                }
+
+                // Calculate time remaining
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Update countdown text
+                const countdownElement = document.getElementById(elementId);
+                countdownElement.innerHTML = `${days} يوم ${hours} ساعة ${minutes} دقيقة ${seconds} ثانية`;
+
+                // Change color based on remaining days
+                if (days < 11) {
+                    countdownElement.classList.add("red");
+                    countdownElement.classList.remove("orange");
+                } else if (days < 30) {
+                    countdownElement.classList.add("orange");
+                    countdownElement.classList.remove("red");
+                } else {
+                    countdownElement.classList.remove("orange", "red");
+                }
+
+                // Special logic for the first countdown (حفل التخرج)
+                if (elementId === "countdown1") {
+                    if (days < 1) {
+                        // Show balloons and change motivational phrase
+                        document.getElementById("motivationalPhrase").textContent = "مبروووك التخرج 🎉";
+                        createBalloons();
+                    }
+                }
+
+                // Update progress bar
+                const elapsed = now - startDate;
+                const progress = (elapsed / totalDuration) * 100;
+                document.getElementById(progressId).value = progress;
+            }, 1000);
+        }
+
+        // Display a random motivational phrase
+        displayMotivationalPhrase();
+
+        // Set the target dates and start the countdowns
+        countdown("2025-05-04T00:00:00", "countdown1", "progress1", "endDate1"); // حفل التخرج (May 4, 2025)
+        countdown("2025-05-01T00:00:00", "countdown2", "progress2", "endDate2"); // تسليم البحث (May 1, 2025)
+        countdown("2025-05-22T00:00:00", "countdown3", "progress3", "endDate3"); // نهاية التدريب (May 22, 2025)
+    </script>
+</body>
+
+</html>

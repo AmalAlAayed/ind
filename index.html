@@ -251,6 +251,12 @@
                         createBalloons();
                     }
                 }
+                if (elementId === "countdown4") {
+                    if (days < 1) {
+                      document.getElementById("motivationalPhrase").textContent = "وصلنا لـ ٨ مايو! يوم مميز 🎉";
+                      createBalloons();
+                   }
+                }
 
                 // Update progress bar
                 const elapsed = now - startDate;

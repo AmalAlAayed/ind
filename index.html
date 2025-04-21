@@ -130,19 +130,19 @@
 <body>
     <h1>العدادات التنازلية</h1>
     <div class="motivational-phrase" id="motivationalPhrase"></div>
-
-    <div class="countdown">
-        <h2>🎓 حفل التخرج</h2>
-        <p id="countdown1"></p>
-        <div class="end-date" id="endDate1"></div>
-        <progress id="progress1" value="0" max="100"></progress>
-    </div>
-
+    
     <div class="countdown">
         <h2>📄 تسليم البحث</h2>
         <p id="countdown2"></p>
         <div class="end-date" id="endDate2"></div>
         <progress id="progress2" value="0" max="100"></progress>
+    </div>
+    
+    <div class="countdown">
+        <h2>🎓 حفل التخرج</h2>
+        <p id="countdown1"></p>
+        <div class="end-date" id="endDate1"></div>
+        <progress id="progress1" value="0" max="100"></progress>
     </div>
     
     <div class="countdown">
@@ -285,7 +285,7 @@
 
         // Set the target dates and start the countdowns
         countdown("2025-05-01T00:00:00", "countdown1", "progress1", "endDate1"); // حفل التخرج (May 4, 2025)
-        countdown("2025-04-28T00:00:00", "countdown2", "progress2", "endDate2"); // تسليم البحث (May 1, 2025)
+        countdown("2025-04-28T23:00:00", "countdown2", "progress2", "endDate2"); // تسليم البحث (May 1, 2025)
         countdown("2025-05-22T00:00:00", "countdown3", "progress3", "endDate3"); // نهاية التدريب (May 22, 2025)
         countdown("2025-05-07T00:00:00", "countdown4", "progress4", "endDate4");
         countdown("2025-05-15T00:00:00", "countdown5", "progress5", "endDate5");
